@@ -1,0 +1,60 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Lagos",
+        "id": "NG-LA"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[3.0, 6.3], [3.7, 6.3], [3.7, 6.7], [3.0, 6.7], [3.0, 6.3]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Abuja",
+        "id": "NG-FC"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[7.3, 8.8], [7.6, 8.8], [7.6, 9.2], [7.3, 9.2], [7.3, 8.8]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kano",
+        "id": "NG-KN"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[8.3, 11.8], [9.0, 11.8], [9.0, 12.5], [8.3, 12.5], [8.3, 11.8]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Rivers",
+        "id": "NG-RI"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[6.7, 4.6], [7.3, 4.6], [7.3, 5.2], [6.7, 5.2], [6.7, 4.6]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kaduna",
+        "id": "NG-KD"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[7.3, 10.2], [8.3, 10.2], [8.3, 11.0], [7.3, 11.0], [7.3, 10.2]]]
+      }
+    }
+  ]
+} 

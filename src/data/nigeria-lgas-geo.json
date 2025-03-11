@@ -1,0 +1,77 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "lga_name": "Ikeja",
+        "state_name": "Lagos",
+        "id": "NG-LA-IK"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[3.3, 6.5], [3.4, 6.5], [3.4, 6.6], [3.3, 6.6], [3.3, 6.5]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "lga_name": "Lagos Island",
+        "state_name": "Lagos",
+        "id": "NG-LA-LI"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[3.4, 6.4], [3.5, 6.4], [3.5, 6.5], [3.4, 6.5], [3.4, 6.4]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "lga_name": "Surulere",
+        "state_name": "Lagos",
+        "id": "NG-LA-SU"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[3.3, 6.4], [3.4, 6.4], [3.4, 6.5], [3.3, 6.5], [3.3, 6.4]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "lga_name": "Gwagwalada",
+        "state_name": "Abuja",
+        "id": "NG-FC-GW"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[7.4, 8.9], [7.5, 8.9], [7.5, 9.0], [7.4, 9.0], [7.4, 8.9]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "lga_name": "Abuja Municipal",
+        "state_name": "Abuja",
+        "id": "NG-FC-AM"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[7.4, 9.0], [7.5, 9.0], [7.5, 9.1], [7.4, 9.1], [7.4, 9.0]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "lga_name": "Kano Municipal",
+        "state_name": "Kano",
+        "id": "NG-KN-KM"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[8.5, 12.0], [8.6, 12.0], [8.6, 12.1], [8.5, 12.1], [8.5, 12.0]]]
+      }
+    }
+  ]
+} 
