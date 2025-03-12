@@ -253,7 +253,7 @@ const Map: React.FC = () => {
     };
 
     // Adjust these thresholds based on your data
-    const thresholds = [0.2, 0.4, 0.6, 0.8];
+    const thresholds = [10, 100, 1000, 10000];
     
     const scale = colorScales[metric];
     for (let i = 0; i < thresholds.length; i++) {
