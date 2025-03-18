@@ -56,6 +56,20 @@ interface MapDataItem {
   };
 }
 
+// Update the Brand interface to match the API response
+interface Brand {
+  _id: {
+    $oid: string;
+  };
+  brand_name: string;
+}
+
+// Add these interfaces for the new filters
+interface Category {
+  id: string;
+  name: string;
+}
+
 // Add this component to handle map view updates
 const MapUpdater: React.FC<{ 
   selectedState: StateData | null, 
@@ -115,6 +129,23 @@ const Map: React.FC = () => {
   const [lgasLoading, setLgasLoading] = useState<boolean>(false);
   const [mapDataLoading, setMapDataLoading] = useState<boolean>(false);
 
+  // Update brands state to match new interface
+  const [brands, setBrands] = useState<Brand[]>([]);
+  
+  const [categories, setCategories] = useState<Category[]>([
+    { id: '1', name: 'Beverages' },
+    { id: '2', name: 'Food & Snacks' },
+    { id: '3', name: 'Personal Care' },
+    { id: '4', name: 'Home Care' },
+    { id: '5', name: 'Electronics' },
+    { id: '6', name: 'Telecommunications' },
+    { id: '7', name: 'Pharmaceuticals' },
+    { id: '8', name: 'Clothing & Apparel' }
+  ]);
+  
+  const [selectedBrands, setSelectedBrands] = useState<Brand[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
+
   const { handleSubmit, register, setValue } = useForm<FormData>({
     defaultValues: {
       userSelectedState: "",
@@ -160,6 +191,20 @@ const Map: React.FC = () => {
     
     fetchLgas();
   }, [selectedState]);
+
+  // Add useEffect to fetch brands from API
+  useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        const response = await axios.get('https://unit-economic.punchapps.cool/api/v1/brands?page=1&page_size=100');
+        setBrands(response.data.data);
+      } catch (error) {
+        console.error('Error fetching brands:', error);
+      }
+    };
+    
+    fetchBrands();
+  }, []);
 
   const handleStateChange = (_event: any, value: StateData | null) => {
     setSelectedState(value);
@@ -217,9 +262,15 @@ const Map: React.FC = () => {
       url.searchParams.append('end_date', endDate);
       url.searchParams.append('state_id', selectedState._id.$oid);
       
-      // Only add LGA parameter if an LGA is selected
       if (selectedLga) {
         url.searchParams.append('lga_id', selectedLga._id.$oid);
+      }
+
+      // Add brand_id if brands are selected
+      if (selectedBrands.length > 0) {
+        selectedBrands.forEach(brand => {
+          url.searchParams.append('brand_id', brand._id.$oid);
+        });
       }
 
       const response = await fetch(url.toString());
@@ -313,7 +364,7 @@ const Map: React.FC = () => {
     setSelectedMetric(event.target.value as 'density' | 'revenue' | 'ttv' | 'transaction_frequency');
   };
 
-  // Add a reset function
+  // Update the reset function to include new filters
   const handleReset = () => {
     // Reset state selections
     setSelectedState(null);
@@ -332,6 +383,10 @@ const Map: React.FC = () => {
     
     // Reset metric to default
     setSelectedMetric('ttv');
+    
+    // Reset brand and category selections
+    setSelectedBrands([]);
+    setSelectedCategories([]);
   };
 
   return (
@@ -386,6 +441,63 @@ const Map: React.FC = () => {
                       {...register("userSelectedLga", { required: false })}
                     />
                   )}
+                />
+              </Grid2>
+              <Grid2 size={12}>
+                <Autocomplete
+                  multiple
+                  options={brands}
+                  getOptionLabel={(option) => option.brand_name}
+                  value={selectedBrands}
+                  onChange={(_event, value) => setSelectedBrands(value)}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Brands (Optional)"
+                      fullWidth
+                      sx={{ mt: 2 }}
+                    />
+                  )}
+                  renderTags={(value, getTagProps) =>
+                    value.map((option, index) => {
+                      const tagProps = getTagProps({ index });
+                      const { key, ...otherTagProps } = tagProps;
+                      return (
+                        <div key={option._id.$oid} {...otherTagProps}>
+                          {option.brand_name}
+                        </div>
+                      );
+                    })
+                  }
+                />
+              </Grid2>
+              <Grid2 size={12}>
+                <Autocomplete
+                  multiple
+                  options={categories}
+                  getOptionLabel={(option) => option.name}
+                  value={selectedCategories}
+                  onChange={(_event, value) => setSelectedCategories(value)}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Categories (Optional)"
+                      fullWidth
+                      sx={{ mt: 2 }}
+                    />
+                  )}
+                  renderTags={(value, getTagProps) =>
+                    value.map((option, index) => {
+                      const tagProps = getTagProps({ index });
+                      // Remove the key from tagProps to avoid duplicate keys
+                      const { key, ...otherTagProps } = tagProps;
+                      return (
+                        <div key={option.id} {...otherTagProps}>
+                          {option.name}
+                        </div>
+                      );
+                    })
+                  }
                 />
               </Grid2>
               <Grid2 size={12}>
@@ -535,6 +647,45 @@ const Map: React.FC = () => {
             <Paper style={{ padding: 10, marginTop: 10 }}>
               <Typography variant="subtitle1">
                 Results: {mapData.length} {mapData.length === 1 ? 'area' : 'areas'} found
+              </Typography>
+            </Paper>
+          )}
+          
+          {/* Add selected filters summary */}
+          {( selectedBrands.length > 0 ) && (
+            <Paper style={{ padding: 10, marginTop: 10 }}>
+              <Typography variant="subtitle1" gutterBottom>
+                Applied Filters
+              </Typography>
+              <div>
+                <Typography variant="body2" component="span" fontWeight="bold">
+                  Brands:
+                </Typography>
+                <Typography variant="body2" component="span" sx={{ ml: 1 }}>
+                  {selectedBrands.map(b => b.brand_name).join(', ')}
+                </Typography>
+              </div>
+            </Paper>
+          )}
+          {( selectedCategories.length > 0) && (
+            <Paper style={{ padding: 10, marginTop: 10 }}>
+              <Typography variant="subtitle1" gutterBottom>
+                Applied Filters
+              </Typography>
+              
+              {selectedCategories.length > 0 && (
+                <div>
+                  <Typography variant="body2" component="span" fontWeight="bold">
+                    Categories:
+                  </Typography>
+                  <Typography variant="body2" component="span" sx={{ ml: 1 }}>
+                    {selectedCategories.map(c => c.name).join(', ')}
+                  </Typography>
+                </div>
+              )}
+              
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 1, fontStyle: 'italic' }}>
+                Note: Category filters are not yet connected to the map data.
               </Typography>
             </Paper>
           )}
