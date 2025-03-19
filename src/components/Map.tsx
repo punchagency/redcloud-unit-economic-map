@@ -143,7 +143,7 @@ const Map: React.FC = () => {
     { id: '8', name: 'Clothing & Apparel' }
   ]);
   
-  const [selectedBrands, setSelectedBrands] = useState<Brand[]>([]);
+  const [selectedBrand, setSelectedBrand] = useState<Brand | null>(null);
   const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
 
   const { handleSubmit, register, setValue } = useForm<FormData>({
@@ -266,11 +266,8 @@ const Map: React.FC = () => {
         url.searchParams.append('lga_id', selectedLga._id.$oid);
       }
 
-      // Add brand_id if brands are selected
-      if (selectedBrands.length > 0) {
-        selectedBrands.forEach(brand => {
-          url.searchParams.append('brand_id', brand._id.$oid);
-        });
+      if (selectedBrand) {
+        url.searchParams.append('brand_id', selectedBrand._id.$oid);
       }
 
       const response = await fetch(url.toString());
@@ -385,7 +382,7 @@ const Map: React.FC = () => {
     setSelectedMetric('ttv');
     
     // Reset brand and category selections
-    setSelectedBrands([]);
+    setSelectedBrand(null);
     setSelectedCategories([]);
   };
 
@@ -445,30 +442,18 @@ const Map: React.FC = () => {
               </Grid2>
               <Grid2 size={12}>
                 <Autocomplete
-                  multiple
                   options={brands}
                   getOptionLabel={(option) => option.brand_name}
-                  value={selectedBrands}
-                  onChange={(_event, value) => setSelectedBrands(value)}
+                  value={selectedBrand}
+                  onChange={(_event, value) => setSelectedBrand(value)}
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="Brands (Optional)"
+                      label="Brand (Optional)"
                       fullWidth
                       sx={{ mt: 2 }}
                     />
                   )}
-                  renderTags={(value, getTagProps) =>
-                    value.map((option, index) => {
-                      const tagProps = getTagProps({ index });
-                      const { key, ...otherTagProps } = tagProps;
-                      return (
-                        <div key={option._id.$oid} {...otherTagProps}>
-                          {option.brand_name}
-                        </div>
-                      );
-                    })
-                  }
                 />
               </Grid2>
               <Grid2 size={12}>
@@ -652,17 +637,17 @@ const Map: React.FC = () => {
           )}
           
           {/* Add selected filters summary */}
-          {( selectedBrands.length > 0 ) && (
+          {selectedBrand && (
             <Paper style={{ padding: 10, marginTop: 10 }}>
               <Typography variant="subtitle1" gutterBottom>
                 Applied Filters
               </Typography>
               <div>
                 <Typography variant="body2" component="span" fontWeight="bold">
-                  Brands:
+                  Brand:
                 </Typography>
                 <Typography variant="body2" component="span" sx={{ ml: 1 }}>
-                  {selectedBrands.map(b => b.brand_name).join(', ')}
+                  {selectedBrand.brand_name}
                 </Typography>
               </div>
             </Paper>
