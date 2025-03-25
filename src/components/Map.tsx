@@ -206,6 +206,23 @@ const Map: React.FC = () => {
     fetchBrands();
   }, []);
 
+  // Fetch categories from API
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get('https://unit-economic.punchapps.cool/api/v1/categories?page=1&page_size=10');
+        setCategories(response.data.data.map((category: any) => ({
+          id: category._id.$oid,
+          name: category.product_category
+        })));
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   const handleStateChange = (_event: any, value: StateData | null) => {
     setSelectedState(value);
     setSelectedLga(null);
@@ -268,6 +285,11 @@ const Map: React.FC = () => {
 
       if (selectedBrand) {
         url.searchParams.append('brand_id', selectedBrand._id.$oid);
+      }
+
+      if (selectedCategories.length > 0) {
+        const categoryIds = selectedCategories.map(category => category.id).join(',');
+        url.searchParams.append('product_category', categoryIds);
       }
 
       const response = await fetch(url.toString());
